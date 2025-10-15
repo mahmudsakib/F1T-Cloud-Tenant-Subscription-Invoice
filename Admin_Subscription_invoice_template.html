@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-css/1.0.0/plus-jakarta-sans.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans&display=swap" rel="stylesheet">
     <style>
         /* Base styles that are email-safe */
         body,
@@ -76,8 +76,8 @@
         }
 
         .info-label {
-            width: 150px;
-            padding: 8px;
+            width: 130px;
+            padding: 5px;
             text-align: left;
         }
 
@@ -299,6 +299,81 @@
             }
         }
 
+        .company-details {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.company-details td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  vertical-align: top;
+}
+
+.company-label {
+  width: 25%;
+  font-weight: bold;
+  text-align: left;
+}
+
+.company-value {
+  width: 45%;
+  text-align: left;
+}
+
+.company-arabic {
+  width: 30%;
+  text-align: right;
+  direction: rtl;
+  font-style: italic;
+}
+
+/* Responsive tweak for small screens */
+@media screen and (max-width: 480px) {
+  .company-details td {
+    display: block;
+    width: 100%;
+    text-align: right;
+  }
+  .company-arabic {
+    font-style: normal;
+    margin-top: 4px;
+  }
+}
+
+
+        @media screen and (max-width: 480px) {
+  .arabic-title {
+    font-size: 18px;
+  }
+
+  .title-cell div[style*="font-size: 18px"] {
+    font-size: 14px !important;
+  }
+
+  .info-label,
+  .info-value {
+    width: 100%;
+    display: block;
+    padding: 4px;
+  }
+
+  .info-arabic {
+    text-align: right;
+    padding: 2px 4px;
+  }
+
+  .summary-label,
+  .summary-value,
+  .summary-arabic {
+    display: block;
+    width: 100%;
+    text-align: right;
+  }
+}
+
         @media screen and (max-width: 480px) {
 
             .terms-header,
@@ -334,7 +409,7 @@
                 </td>
                 <td class="company-cell">
 
-                    <div>{{ f1t.address_line_1 }}</div>
+                    <div>Address: Kuwait, Kuwait City <br>Email:info@f1tcloud.com <br>Tel: +965 9956 8816 / +965 9879 8669</div>
                 
                 </td>
             </tr>
@@ -353,23 +428,24 @@
   </tr>
 
   <tr>
-    <td class="info-label">From Date</td>
-    <td class="info-value">: {{ start.date }}</td>
-    <td class="info-arabic">من تاريخ</td>
+     <td class="info-label">Billing Period</td>
+     <td class="info-value">: {{ start }} - {{ expiry }}</td>
+     <td class="info-arabic">فترة الفوترة</td>
 
     <td class="info-label">Invoice Date</td>
     <td class="info-value">: {{ created_at }}</td>
     <td class="info-arabic">تاريخ الفاتورة</td>
   </tr>
 
+
   <tr>
-    <td class="info-label">To Date</td>
-    <td class="info-value">: {{ due.date }}</td>
-    <td class="info-arabic">إلى تاريخ</td>   
+    <td class="info-label">Billing Date</td>
+    <td class="info-value">: {{ billing_date }}</td>
+    <td class="info-arabic">تاريخ الفاتورة</td>   
 
     <td class="info-label">Prepared By</td>
-    <td class="info-value">: {{ staff.name }}</td>
-    <td class="info-arabic">أُعدت بواسطة</td>
+    <td class="info-value">: {{ staff_name }}</td>
+    <td class="info-arabic">أُعد بواسطة</td>
   </tr>
 </table>
 
@@ -380,12 +456,12 @@
   <tr>
 
     <th>
-  Subscription Plan<br>
-  <span style="font-family: 'Plus Jakarta Sans', Arial;">خطة الاشتراك</span>
+  Item(s)<br>
+  <span style="font-family: 'Plus Jakarta Sans', Arial;">العناصر</span>
 </th>
     <th>
-  Subscription Fee<br>
-  <span style="font-family: 'Plus Jakarta Sans', Arial;">رسوم الاشتراك</span>
+  Amount<br>
+  <span style="font-family: 'Plus Jakarta Sans', Arial;">المبلغ</span>
     </th>
     <th>
       Discount<br>
@@ -406,7 +482,7 @@
   </tr>
 
   <tr>
-    <td>{{ plan_name }}</td>
+    <td>{{ subscription_name }}</td>
     <td>{{ amount }}</td>
     <td>{{ discount_amount }}</td>
     <td>{{ tax_amount }}</td>
@@ -419,45 +495,46 @@
         <!-- Summary Section -->
 <table class="summary-table" cellpadding="0" cellspacing="0">
   <tr>
-  <td class="summary-label">
-    <span class="label-text">Subscription Fee</span>:
-  </td>
-  <td class="summary-value">{{ amount }}</td>
-  <td class="summary-arabic">رسوم الاشتراك</td>
-</tr>
-
-  <tr>
     <td class="summary-label">
-      <span class="label-text">Discount</span>:
+      <span class="label-text">Total Amount</span>:
     </td>
-    <td class="summary-value">{{ discount_amount }}</td>
-    <td class="summary-arabic">الخصم</td>
+    <td class="summary-value">{{ total_amount }}</td>
+    <td class="summary-arabic">إجمالي المبلغ</td>
   </tr>
 
   <tr>
     <td class="summary-label">
-      <span class="label-text">Tax</span>:
+      <span class="label-text">Total Discount</span>:
     </td>
-    <td class="summary-value">{{ tax_amount }}</td>
-    <td class="summary-arabic">الضريبة</td>
+    <td class="summary-value">{{ total_discount }}</td>
+    <td class="summary-arabic">إجمالي الخصم</td>
   </tr>
 
   <tr>
     <td class="summary-label">
-      <span class="label-text">Fees</span>:
+      <span class="label-text">Total Tax</span>:
+    </td>
+    <td class="summary-value">{{ total_tax }}</td>
+    <td class="summary-arabic">إجمالي الضريبة</td>
+  </tr>
+
+  <tr>
+    <td class="summary-label">
+      <span class="label-text">Total Fees</span>:
     </td>
     <td class="summary-value">{{ fees_amount }}</td>
-    <td class="summary-arabic">الرسوم</td>
+    <td class="summary-arabic">إجمالي الرسوم</td>
   </tr>
 
   <tr class="total-row">
     <td class="summary-label">
       <span class="label-text">Total Payable</span>:
     </td>
-    <td class="summary-value">{{ payable_amount }}</td>
-    <td class="summary-arabic">المبلغ الإجمالي المستحق</td>
+    <td class="summary-value">{{ total_payable }}</td>
+    <td class="summary-arabic">إجمالي المبلغ المستحق</td>
   </tr>
 </table>
+
 
 <br>
 
@@ -485,27 +562,31 @@
   <tr>
     <td>{{ transaction.created_at }}</td>
     <td>{{ transaction.medium }}</td>
-    <td>{{ transaction.payable_amount }}</td>
-    <td>{{ transaction.transaction_id }}</td>
+    <td>{{ transaction.total_payable }}</td>
+    <td>{{ transaction_id }}</td>
   </tr>
 </table>
 
 
-        <!-- Company Details -->
-        <table class="company-details" cellpadding="0" cellspacing="0">
-            <tr>
-                <td style="width: 200px; padding: 8px; vertical-align: top;">VAT Registration No</td>
-                <td style="padding: 8px;">: {{ vat_number }}</td>
-            </tr>
-            <tr>
-                <td style="padding: 8px;">Company Registration No</td>
-                <td style="padding: 8px;">: {{ company_registration_number }}</td>
-            </tr>
-            <tr>
-                <td style="padding: 8px;">Company Address</td>
-                <td style="padding: 8px;">: {{ company_address }}</td>
-            </tr>
-        </table>
+        <!-- Company Details (English + Arabic) -->
+<table class="company-details" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="company-label">VAT Registration No</td>
+    <td class="company-value"> {{ vat_number }}</td>
+    <td class="company-arabic">رقم ضريبة القيمة المضافة</td>
+  </tr>
+  <tr>
+    <td class="company-label">Company Registration No</td>
+    <td class="company-value"> {{ company_registration_number }}</td>
+    <td class="company-arabic">رقم تسجيل الشركة</td>
+  </tr>
+  <tr>
+    <td class="company-label">Company Address</td>
+    <td class="company-value"> {{ company_address }}</td>
+    <td class="company-arabic">عنوان الشركة</td>
+  </tr>
+</table>
+
 
         <!-- Terms & Conditions -->
         <table class="terms-table" cellpadding="0" cellspacing="0">
@@ -515,7 +596,7 @@
             </tr>
             <tr>
                 <td colspan="2" style="padding-top: 15px;">
-                    {{ f1t.terms_and_conditions }}
+                    {{ f1tadmin_terms_and_conditions }}
                 </td>
             </tr>
         </table>
